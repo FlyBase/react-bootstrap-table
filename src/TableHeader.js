@@ -38,7 +38,9 @@ function getSortOrder(sortList, field, enableSort) {
 class TableHeader extends Component {
 
   render() {
-    const { sortIndicator, sortList, onSort, reset, version, condensed, bordered } = this.props;
+    const { sortIndicator, sortList, onSort, reset, version, condensed, bordered,
+      expandedColumnHeaderComponent, noAnyExpand, toggleExpandAllChilds, expandAll
+    } = this.props;
     const containerClasses = classSet(
       'react-bs-container-header',
       'table-header-wrapper',
@@ -64,13 +66,21 @@ class TableHeader extends Component {
     rows[0].push( [
       this.props.expandColumnVisible &&
         this.props.expandColumnBeforeSelectColumn &&
-          <ExpandRowHeaderColumn key='expandCol' rowCount={ rowCount + 1 }/>
+          <ExpandRowHeaderColumn key='expandCol' rowCount={ rowCount + 1 }
+            expandedColumnHeaderComponent={ expandedColumnHeaderComponent }
+            noAnyExpand={ noAnyExpand }
+            expandAll={ expandAll }
+            toggleExpandAllChilds={ toggleExpandAllChilds }/>
     ], [
       this.renderSelectRowHeader(rowCount + 1, rowKey++)
     ], [
       this.props.expandColumnVisible &&
         !this.props.expandColumnBeforeSelectColumn &&
-          <ExpandRowHeaderColumn key='expandCol' rowCount={ rowCount + 1 }/>
+          <ExpandRowHeaderColumn key='expandCol' rowCount={ rowCount + 1 }
+            expandedColumnHeaderComponent={ expandedColumnHeaderComponent }
+            noAnyExpand={ noAnyExpand }
+            expandAll={ expandAll }
+            toggleExpandAllChilds={ toggleExpandAllChilds }/>
     ]);
 
     React.Children.forEach(this.props.children, (elm) => {
@@ -105,10 +115,13 @@ class TableHeader extends Component {
     });
 
     return (
-      <div ref='container' className={ containerClasses } style={ this.props.style }>
+      <div
+        ref={ node => this.container = node }
+        className={ containerClasses }
+        style={ this.props.style }>
         <table className={ tableClasses }>
-          { React.cloneElement(this.props.colGroups, { ref: 'headerGrp' }) }
-          <thead ref='header'>
+          { React.cloneElement(this.props.colGroups, { ref: node => this.headerGrp = node }) }
+          <thead ref={ node => this.header = node }>
             { trs }
           </thead>
         </table>
@@ -117,7 +130,7 @@ class TableHeader extends Component {
   }
 
   getHeaderColGrouop = () => {
-    return this.refs.headerGrp.childNodes;
+    return this.headerGrp.childNodes;
   }
 
   renderSelectRowHeader(rowCount, rowKey) {
@@ -166,8 +179,12 @@ TableHeader.propTypes = {
   reset: PropTypes.bool,
   expandColumnVisible: PropTypes.bool,
   expandColumnComponent: PropTypes.func,
+  expandedColumnHeaderComponent: PropTypes.func,
   expandColumnBeforeSelectColumn: PropTypes.bool,
-  version: PropTypes.string
+  version: PropTypes.string,
+  noAnyExpand: PropTypes.bool,
+  expandAll: PropTypes.bool,
+  toggleExpandAllChilds: PropTypes.func
 };
 
 export default TableHeader;
