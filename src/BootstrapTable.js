@@ -13,7 +13,7 @@ import ToolBar from './toolbar/ToolBar';
 import TableFilter from './TableFilter';
 import { TableDataStore } from './store/TableDataStore';
 import Util from './util';
-import exportCSVUtil from './csv_export_util';
+import exportCSVUtil from './export_util';
 import { Filter } from './Filter';
 
 
