@@ -44,8 +44,7 @@ const CONST_VAR = {
     SELECT: 'SelectFilter',
     NUMBER: 'NumberFilter',
     DATE: 'DateFilter',
-    CUSTOM: 'CustomFilter',
-    ARRAY: 'ArrayFilter'
+    CUSTOM: 'CustomFilter'
   },
   FILTER_COND_EQ: 'eq',
   FILTER_COND_LIKE: 'like',
