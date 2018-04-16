@@ -24,7 +24,7 @@ class TableHeaderColumn extends Component {
     }
 
     // If column not displaying the same dataField, reset the filter accordingly
-    if (nextProps.dataField !== this.props.dataField) {
+    if (nextProps.filter && nextProps.dataField !== this.props.dataField) {
       const emitter = nextProps.filter.emitter || {};
       const currentFilter = emitter.currentFilter || {};
       const filter = currentFilter[nextProps.dataField];
@@ -263,6 +263,7 @@ TableHeaderColumn.propTypes = {
   dataFormat: PropTypes.func,
   csvFormat: PropTypes.func,
   csvHeader: PropTypes.string,
+  csvFieldType: PropTypes.oneOf([ Const.CSV_STRING_TYPE, Const.CSV_NUMBER_TYPE ]),
   isKey: PropTypes.bool,
   editable: PropTypes.any,
   hidden: PropTypes.bool,
@@ -323,6 +324,7 @@ TableHeaderColumn.defaultProps = {
   dataFormat: undefined,
   csvFormat: undefined,
   csvHeader: undefined,
+  csvFieldType: Const.CSV_STRING_TYPE,
   isKey: false,
   editable: true,
   onSort: undefined,
