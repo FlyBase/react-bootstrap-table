@@ -7,6 +7,7 @@ import Alert from 'react-s-alert';
 import Const from './Const';
 import TableHeaderColumn from './TableHeaderColumn';
 import TableHeader from './TableHeader';
+import TableFooter from './TableFooter';
 import TableBody from './TableBody';
 import PaginationList from './pagination/PaginationList';
 import ToolBar from './toolbar/ToolBar';
@@ -62,7 +63,7 @@ class BootstrapTable extends Component {
       const nextDataFields = React.Children.map(props.children, column => column.props.dataField);
       React.Children.forEach(this.props.children, column => {
         const { dataField, filter } = column.props;
-        if (!nextDataFields.includes(dataField)) {
+        if (filter && !nextDataFields.includes(dataField)) {
           // Clear filter
           this.filter.handleFilter(dataField, '', filter.type, filter);
         }
@@ -343,6 +344,9 @@ class BootstrapTable extends Component {
     this._adjustTable();
     window.addEventListener('resize', this._adjustTable);
     this.refs.body.refs.container.addEventListener('scroll', this._scrollHeader);
+    if (this.props.footer) {
+      this.refs.body.refs.container.addEventListener('scroll', this._scrollFooter);
+    }
     if (this.props.scrollTop) {
       this._scrollTop();
     }
@@ -352,6 +356,9 @@ class BootstrapTable extends Component {
     window.removeEventListener('resize', this._adjustTable);
     if (this.refs && this.refs.body && this.refs.body.refs) {
       this.refs.body.refs.container.removeEventListener('scroll', this._scrollHeader);
+      if (this.props.footer) {
+        this.refs.body.refs.container.removeEventListener('scroll', this._scrollFooter);
+      }
     }
     if (this.filter) {
       this.filter.removeAllListeners('onFilterChange');
@@ -412,6 +419,7 @@ class BootstrapTable extends Component {
       expandColumnOptions.expandColumnBeforeSelectColumn = true;
     }
     const colGroups = Util.renderColGroup(columns, this.props.selectRow, expandColumnOptions, this.props.version);
+    const tableFooter = this.renderTableFooter(this.props.footerData, this.state.data, columns, colGroups);
     let sortIndicator = this.props.options.sortIndicator;
     if (typeof this.props.options.sortIndicator === 'undefined') sortIndicator = true;
 
@@ -502,6 +510,9 @@ class BootstrapTable extends Component {
             y={ this.state.y }
             withoutTabIndex={ this.props.withoutTabIndex }
             onEditCell={ this.handleEditCell } />
+            {
+              tableFooter
+            }
         </div>
         { tableFilter }
         { showPaginationOnBottom ? pagination : null }
@@ -1348,6 +1359,35 @@ class BootstrapTable extends Component {
     }
   }
 
+  renderTableFooter(footerData, footerFormatterReturnData, columns, colGroups) {
+    if (this.props.footer) {
+      let hideSelectColumn = true;
+      const { mode } = this.props.selectRow;
+      const isSelectRowDefined = Util.isSelectRowDefined(mode);
+      if (isSelectRowDefined) {
+        hideSelectColumn = this.props.selectRow.hideSelectColumn;
+      }
+      return (
+        <TableFooter
+          ref='footer'
+          columns={ columns }
+          colGroups={ colGroups }
+          footerFormatterReturnData={ footerFormatterReturnData }
+          tableFooterClass={ this.props.tableFooterClass }
+          style={ this.props.headerStyle }
+          hideSelectColumn={ hideSelectColumn }
+          expandColumnVisible={ this.props.expandColumnOptions.expandColumnVisible }
+          bordered={ this.props.bordered }
+          condensed={ this.props.condensed }
+          isFiltered={ this.filter ? true : false }
+          showStickyColumn={ this.props.showStickyColumn }>
+          { footerData }
+        </TableFooter>
+      );
+    }
+    return null;
+  }
+
   _scrollTop = () => {
     const { scrollTop } = this.props;
     if (scrollTop === Const.SCROLL_TOP) {
@@ -1360,6 +1400,12 @@ class BootstrapTable extends Component {
   }
   _scrollHeader = (e) => {
     this.refs.header.refs.container.scrollLeft = e.currentTarget.scrollLeft;
+  }
+
+  _scrollFooter = (e) => {
+    if (this.props.footer) {
+      this.refs.footer.refs.container.scrollLeft = e.currentTarget.scrollLeft;
+    }
   }
 
   _adjustTable() {
@@ -1553,6 +1599,7 @@ BootstrapTable.propTypes = {
   bodyContainerClass: PropTypes.string,
   tableHeaderClass: PropTypes.string,
   tableBodyClass: PropTypes.string,
+  tableFooterClass: PropTypes.string,
   options: PropTypes.shape({
     clearSearch: PropTypes.bool,
     sortName: PropTypes.oneOfType([ PropTypes.string, PropTypes.array ]),
@@ -1663,7 +1710,8 @@ BootstrapTable.propTypes = {
     expandColumnVisible: PropTypes.bool,
     expandColumnComponent: PropTypes.func,
     expandColumnBeforeSelectColumn: PropTypes.bool
-  })
+  }),
+  footer: PropTypes.bool
 };
 BootstrapTable.defaultProps = {
   version: '3',
@@ -1729,6 +1777,7 @@ BootstrapTable.defaultProps = {
   bodyContainerClass: null,
   tableHeaderClass: null,
   tableBodyClass: null,
+  tableFooterClass: null,
   options: {
     clearSearch: false,
     sortName: undefined,
@@ -1820,7 +1869,8 @@ BootstrapTable.defaultProps = {
     sort: Const.AUTO_COLLAPSE_WHEN_SORT,
     filter: Const.AUTO_COLLAPSE_WHEN_FILTER,
     search: Const.AUTO_COLLAPSE_WHEN_SEARCH
-  }
+  },
+  footer: false
 };
 
 export default BootstrapTable;
