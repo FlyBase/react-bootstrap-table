@@ -190,6 +190,7 @@ class PaginationList extends Component {
               tabIndex='-1'
               key={ pageText }
               className='dropdown-item'
+              onClick={ event => event.preventDefault() }
               onMouseDown={ e => {
                 e.preventDefault();
                 this.changeSizePerPage(pageNum);
