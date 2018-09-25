@@ -10,7 +10,7 @@ class PageButton extends Component {
 
   pageBtnClick = e => {
     e.preventDefault();
-    this.props.changePage(this.props.pageNumber, this.props.pageTitle);
+    this.props.changePage(this.props.pageNumber, this.props.title);
   }
 
   render() {
