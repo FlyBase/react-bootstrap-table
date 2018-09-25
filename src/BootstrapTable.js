@@ -660,11 +660,11 @@ class BootstrapTable extends Component {
     }
   }
 
-  handlePaginationData = (page, sizePerPage) => {
+  handlePaginationData = (page, sizePerPage, title) => {
     const { onPageChange, pageStartIndex } = this.props.options;
     const emptyTable = this.store.isEmpty();
     if (onPageChange) {
-      onPageChange(page, sizePerPage);
+      onPageChange(page, sizePerPage, title);
     }
 
     const state = {
