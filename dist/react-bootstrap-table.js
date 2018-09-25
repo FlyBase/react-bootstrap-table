@@ -9777,7 +9777,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '__pageBtnClick__REACT_HOT_LOADER__',
 	    value: function __pageBtnClick__REACT_HOT_LOADER__(e) {
 	      e.preventDefault();
-	      this.props.changePage(this.props.pageNumber, this.props.pageTitle);
+	      this.props.changePage(this.props.pageNumber, this.props.title);
 	    }
 	  }, {
 	    key: 'render',
