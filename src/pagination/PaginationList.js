@@ -22,7 +22,7 @@ class PaginationList extends Component {
     }
   }
 
-  changePage = page => {
+  changePage = (page, title) => {
     const {
       pageStartIndex,
       prePage,
@@ -49,7 +49,7 @@ class PaginationList extends Component {
     if (keepSizePerPageState) { this.closeDropDown(); }
 
     if (page !== currPage) {
-      this.props.changePage(page, sizePerPage);
+      this.props.changePage(page, sizePerPage, title);
     }
   }
 

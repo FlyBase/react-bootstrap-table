@@ -1166,14 +1166,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: '__handlePaginationData__REACT_HOT_LOADER__',
-	    value: function __handlePaginationData__REACT_HOT_LOADER__(page, sizePerPage) {
+	    value: function __handlePaginationData__REACT_HOT_LOADER__(page, sizePerPage, title) {
 	      var _props$options = this.props.options,
 	          onPageChange = _props$options.onPageChange,
 	          pageStartIndex = _props$options.pageStartIndex;
 
 	      var emptyTable = this.store.isEmpty();
 	      if (onPageChange) {
-	        onPageChange(page, sizePerPage);
+	        onPageChange(page, sizePerPage, title);
 	      }
 
 	      var state = {
@@ -9339,7 +9339,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: '__changePage__REACT_HOT_LOADER__',
-	    value: function __changePage__REACT_HOT_LOADER__(page) {
+	    value: function __changePage__REACT_HOT_LOADER__(page, title) {
 	      var _props = this.props,
 	          pageStartIndex = _props.pageStartIndex,
 	          prePage = _props.prePage,
@@ -9368,7 +9368,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	      if (page !== currPage) {
-	        this.props.changePage(page, sizePerPage);
+	        this.props.changePage(page, sizePerPage, title);
 	      }
 	    }
 	  }, {
@@ -9777,7 +9777,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: '__pageBtnClick__REACT_HOT_LOADER__',
 	    value: function __pageBtnClick__REACT_HOT_LOADER__(e) {
 	      e.preventDefault();
-	      this.props.changePage(this.props.pageNumber);
+	      this.props.changePage(this.props.pageNumber, this.props.title);
 	    }
 	  }, {
 	    key: 'render',
